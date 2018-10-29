@@ -1,0 +1,34 @@
+<configuration>
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>
+                <version/>
+                <loggerName/>
+                <pattern>
+                    <pattern>
+                        {
+                        "context": "#asJson{%message}"
+                        }
+                    </pattern>
+                </pattern>
+                <pattern>
+                    <pattern>
+                        {
+                        "exception": "%exception"
+                        }
+                    </pattern>
+                </pattern>
+                <thread/>
+                <level/>
+                <level_value/>
+            </providers>
+        </encoder>
+    </appender>
+    <logger name="jsonLogger" additivity="false" level="DEBUG">
+        <appender-ref ref="consoleAppender"/>
+    </logger>
+    <root level="DEBUG">
+        <appender-ref ref="consoleAppender"/>
+    </root>
+</configuration>

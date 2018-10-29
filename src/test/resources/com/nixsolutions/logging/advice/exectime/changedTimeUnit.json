@@ -1,0 +1,7 @@
+{
+  "timeLoggingContext": {
+    "taskName": "methodWithExectimeLoggingAndOtherTimeUnit",
+    "duration": 1,
+    "timeUnit": "MICROSECONDS"
+  }
+}

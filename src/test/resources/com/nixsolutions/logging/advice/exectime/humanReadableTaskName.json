@@ -1,0 +1,7 @@
+{
+  "timeLoggingContext": {
+    "taskName": "humanReadableTaskName",
+    "duration": 1,
+    "timeUnit": "MILLISECONDS"
+  }
+}

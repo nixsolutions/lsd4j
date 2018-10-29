@@ -1,0 +1,7 @@
+{
+  "timeLoggingContext": {
+    "taskName": "methodWihExecTimeLogging",
+    "duration": 1,
+    "timeUnit": "MILLISECONDS"
+  }
+}

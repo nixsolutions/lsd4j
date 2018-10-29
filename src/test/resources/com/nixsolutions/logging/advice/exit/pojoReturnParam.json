@@ -1,0 +1,7 @@
+{
+  "@return": {
+    "strParam": "STR_PARAM",
+    "longParam": 1,
+    "enumParam": "ENUM_PARAM"
+  }
+}

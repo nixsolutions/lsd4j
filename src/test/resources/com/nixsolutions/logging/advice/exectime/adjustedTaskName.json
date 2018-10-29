@@ -1,0 +1,7 @@
+{
+  "timeLoggingContext": {
+    "taskName": "newtaskname",
+    "duration": 1,
+    "timeUnit": "MILLISECONDS"
+  }
+}
