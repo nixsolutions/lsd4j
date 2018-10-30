@@ -1,4 +1,4 @@
-group 'com.nixsolutions.lsd4j'
+group 'com.nixsolutions'
 version '0.1-SNAPSHOT'
 
 apply plugin: 'java'
@@ -8,6 +8,7 @@ compileJava {
 
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 
@@ -23,14 +24,14 @@ repositories {
 }
 
 buildscript {
-repositories {
-       maven {
-        url "https://plugins.gradle.org/m2/"
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
-}
-dependencies {
-    classpath 'net.linguica.gradle:maven-settings-plugin:0.4'
-  }
+    dependencies {
+        classpath 'net.linguica.gradle:maven-settings-plugin:0.4'
+    }
 }
 
 apply plugin: 'net.linguica.maven-settings'
@@ -53,8 +54,130 @@ dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.0.0'
     testCompile group: 'org.springframework', name: 'spring-context', version: '4.3.0.RELEASE'
     testCompile('com.github.sbrannen:spring-test-junit5:1.2.0')
-    testCompile group: 'net.logstash.logback', name:'logstash-logback-encoder', version:'5.2'
+    testCompile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.2'
     testCompile 'ch.qos.logback:logback-core:1.2.3'
     testCompile 'ch.qos.logback:logback-classic:1.2.3'
     testCompile 'ch.qos.logback:logback-access:1.2.3'
+}
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
+}
+
+
+signing {
+    sign configurations.archives
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            customizePom(pom)
+            groupId 'com.nixsolutions'
+            artifactId 'lsd4j'
+            version '1.0.0'
+
+            from components.java
+
+            pom.withXml {
+                def pomFile = file("${project.buildDir}/generated-pom.xml")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact(pomAscFile) {
+                    classifier = null
+                    extension = 'pom.asc'
+                }
+            }
+
+            artifact(sourceJar) {
+                classifier = 'sources'
+            }
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
+
+            project.tasks.signArchives.signatureFiles.each {
+                artifact(it) {
+                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                    if (matcher.find()) {
+                        classifier = matcher.group(1)
+                    } else {
+                        classifier = null
+                    }
+                    extension = 'jar.asc'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}
+
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            description 'Log Structured Data 4 Java'
+            name 'LSD4J'
+            url 'https://github.com/nixsolutions/lsd4j'
+            organization {
+                name 'NIX Solutions Ltd.'
+                url 'https://github.com/nixsolutions'
+            }
+            issueManagement {
+                system 'GitHub'
+                url 'https://github.com/nixsolutions/lsd4j/issues'
+            }
+            licenses {
+                license {
+                    name 'MIT License'
+                    url 'https://github.com/nixsolutions/lsd4j/blob/master/LICENSE'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url 'https://github.com/nixsolutions/lsd4j'
+                connection 'scm:git:git://github.com/nixsolutions/lsd4j.git'
+                developerConnection 'scm:git:ssh://git@github.com:nixsolutions/lsd4j.git'
+            }
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenJavaPublication {
+        destination = file("$buildDir/generated-pom.xml")
+    }
+    tasks.publishMavenJavaPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenJavaPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
 }

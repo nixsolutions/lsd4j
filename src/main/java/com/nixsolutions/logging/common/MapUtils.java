@@ -138,7 +138,7 @@ public class MapUtils
   }
 
   /**
-   * Method converts {@code params} context map <String, Object> into JSON String
+   * Method converts {@code params} context map 'String, Object' into JSON String
    *
    * @param params context map
    * @return JSON String
