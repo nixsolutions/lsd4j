@@ -24,7 +24,7 @@ public interface LogContext<T, E>
    * @param contextParams - map of params to shrink
    * @param fieldName     - resulting field name
    * @return resulting map
-   * Example: {quoteId: 123, groupId: 122}, "groupQtContext" -> {groupQtContext: [quoteId: 123, groupId: 122]} <br>
+   * Example: {quoteId: 123, groupId: 122}, "groupQtContext" - {groupQtContext: [quoteId: 123, groupId: 122]} <br>
    */
   Map<String, Object> shrinkParamsAsField(Map<String, Object> contextParams, String fieldName);
 }

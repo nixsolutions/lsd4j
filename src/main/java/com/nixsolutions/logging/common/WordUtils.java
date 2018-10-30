@@ -48,10 +48,10 @@ public class WordUtils
    * Converts {@code sourceString} to a camelCase string using {@code delimiters}
    * Examples:
    * <ul>
-   * <li>toCamelCase("Load renewal"," ") => loadRenewal</li>
-   * <li>toCamelCase("Load renewal! Now"," !") => loadRenewalNow</li>
-   * <li>toCamelCase("Load ReNEwaL"," ") => loadRenewal</li>
-   * <li>toCamelCase("Loadrenewal","") => loadrenewal </li>
+   * <li>toCamelCase("Load renewal"," ") - loadRenewal</li>
+   * <li>toCamelCase("Load renewal! Now"," !") - loadRenewalNow</li>
+   * <li>toCamelCase("Load ReNEwaL"," ") - loadRenewal</li>
+   * <li>toCamelCase("Loadrenewal","") - loadrenewal </li>
    * </ul>
    *
    * @param sourceString

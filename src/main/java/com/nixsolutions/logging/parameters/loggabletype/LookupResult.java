@@ -84,7 +84,7 @@ public class LookupResult
   /**
    * @return
    * @throws UnresolvedLookupException if lookup Is unresolved
-   * @throws RuntimeException,         for all user defined exceptions
+   * @throws RuntimeException         for all user defined exceptions
    */
   public Map<String, Object> executeForResult()
   {

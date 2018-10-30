@@ -4,13 +4,6 @@
 
 This approach was created to make application logging unified and produce sensible logs in a single format that is recognizable by log parsing software (LogStash, etc).
 
-### Development ###
-
-* Dmytriy Velykykh
-* Gleb Cherepukhin
-* Viacheslav Tarasenko
-* Andrey Sivoraksha
-
 ### Requirements ###
 
 Java >= 1.8
