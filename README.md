@@ -131,4 +131,51 @@ Lsd4j has similar way to create custom method for extracting class fields to log
 
 So when some method want to create structured logs from POJO object, with lsd4j mechanism will be called implemented method and will be created context logging map with fields, which was mentioned in your custom method.
 
+## Logging Annotations Overview
+
+### @DoLog.entry
+
+You can annotate public methods with **@Log.entry** annotation to write log message with _DEBUG_ log level when method execution is started. Log message will contain:
+* Method name
+* Context information for method arguments. Context information for method argument will be included into log message if it is annotated with **[@ContextParam](#extractors)** or/and class of method argument is annotated with **[@LoggableType](#loggabletype-annotation-and-methods)**.
+
+### @DoLog.exit
+
+You can annotate public methods with **@Log.exit** annotation to write log message when method execution is finished. 
+
+Log message will contain:
+* Method name
+* Context information for method arguments. Context information for method argument will be included into log message if it is annotated with **[@ContextParam](#extractors)** or/and class of method argument is annotated with **[@LoggableType](#loggabletype-annotation-and-methods)**.
+* Exception, if method was completed unsuccessfully. 
+
+In exceptional case the log message will have _ERROR_ level, otherwise - _DEBUG_ level.
+
+### @DoLog.exectime
+
+You can annotate public methods with **@Log.exectime** annotation to write log message with _DEBUG_ log level when method was completed. 
+
+This annotation can have next arguments:
+* **taskName** - The name of the task which will be displayed in log message (optional argument). If task name was not specified - method name will be used instead of.
+* **timeUnit** - time unit for method execution time (optional argument). By default it’s millisecond.
+
+The log message will contain:
+* Task name
+* Method duration
+* Time unit
+
+### @DoLog
+
+You should annotate method with this annotation if you want enable **[@DoLog.entry](#dologentry)**, **[@DoLog.exit](#dologexit)** and **[@DoLog.exectime](#dologexectime)** annotations.
+It means that if you want to log when method started, method finished and execution time you should annotate method in the following way:
+```
+    @DoLog
+    @DoLog.entry
+    @DoLog.exit
+    @DoLog.exectime
+    public void methodA()
+    {
+        ...
+    }
+```
+
 TBD
