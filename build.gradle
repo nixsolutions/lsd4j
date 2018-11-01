@@ -87,7 +87,7 @@ publishing {
             customizePom(pom)
             groupId 'com.nixsolutions'
             artifactId 'lsd4j'
-            version '1.0.0'
+            version '0.0.1'
 
             from components.java
 
@@ -166,6 +166,11 @@ def customizePom(pom) {
                 connection 'scm:git:git://github.com/nixsolutions/lsd4j.git'
                 developerConnection 'scm:git:ssh://git@github.com:nixsolutions/lsd4j.git'
             }
+            developers {
+                developer {
+                    organization 'NIX Solutions Ltd.'
+                }
+            }
         }
     }
 }
@@ -173,9 +178,6 @@ def customizePom(pom) {
 model {
     tasks.generatePomFileForMavenJavaPublication {
         destination = file("$buildDir/generated-pom.xml")
-    }
-    tasks.publishMavenJavaPublicationToMavenLocal {
-        dependsOn project.tasks.signArchives
     }
     tasks.publishMavenJavaPublicationToMavenRepository {
         dependsOn project.tasks.signArchives
